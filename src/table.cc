@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <stdexcept>
 
+#define PRINT_DEBUG(...) printf(__VA_ARGS__)
+
 static int64_t syms_sum_(std::string_view str) noexcept
 {
 	int64_t sum{};
@@ -26,7 +28,14 @@ void Table::push(std::string_view key)
 	if (syms_sum < 0)
 		throw std::length_error{"Слишком большая строка!"};
 
-	data_[hash_function_((size_t)syms_sum, A, N)] = key;
+	auto hf_ret = hash_function_((size_t)syms_sum, A, N);
+	assert(hf_ret < N);
+	srand((uint32_t)hf_ret);	
+
+	size_t id = (size_t)rand() % N;
+	PRINT_DEBUG("rand: %lu\n", id);
+	data_[id] = key;
+	// data_[hash_function_((size_t)syms_sum, A, N)] = key;
 }
 
 auto Table::get(std::string_view key) const -> std::optional<std::string_view>
@@ -35,5 +44,12 @@ auto Table::get(std::string_view key) const -> std::optional<std::string_view>
 	if (syms_sum < 0)
 		return std::nullopt;
 
-	return data_[hash_function_((size_t)syms_sum, A, N)];
+	auto hf_ret = hash_function_((size_t)syms_sum, A, N);
+	assert(hf_ret < N);
+	srand((uint32_t)hf_ret);	
+
+	size_t id = (size_t)rand() % N;
+	PRINT_DEBUG("rand: %lu\n", id);
+	return data_[id];
+	// return data_[hash_function_((size_t)syms_sum, A, N)];
 }
