@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <optional>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 
@@ -12,7 +13,7 @@ private:
 	using Container = std::array<std::optional<std::string>, N>;
 	Container data_;
 
-	static int64_t syms_sum(std::string_view str) noexcept
+	static int64_t syms_sum_(std::string_view str) noexcept
 	{
 		int64_t sum{};
 		for (char c : str)
@@ -21,24 +22,22 @@ private:
 	}
 
 public:
-	auto get(std::string_view key) const -> std::optional<std::string> const &;
-
-	auto get(std::string_view key) -> std::optional<std::string> &;
+	auto get(std::string_view key) const -> std::optional<std::string_view>;
 
 	void push(std::string_view key);
 
 	auto capacity() const noexcept { return data_.size(); }
 };
 
-template <std::size_t N> void Table<N>::push([[maybe_unused]] std::string_view key) {}
-
-template <std::size_t N>
-auto Table<N>::get([[maybe_unused]] std::string_view key) const -> std::optional<std::string> const &
+template <std::size_t N> void Table<N>::push(std::string_view key) 
 {
-	return data_[0];
+	auto syms_sum = syms_sum_(key);
+	if (syms_sum < 0)
+		throw std::length_error{"Слишком большая строка!"};
 }
 
-template <std::size_t N> auto Table<N>::get([[maybe_unused]] std::string_view key) -> std::optional<std::string> &
+template <std::size_t N>
+auto Table<N>::get([[maybe_unused]] std::string_view key) const -> std::optional<std::string_view>
 {
 	return data_[0];
 }
