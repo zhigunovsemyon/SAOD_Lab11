@@ -30,10 +30,17 @@ void Table::push(std::string_view key)
 
 	auto hf_ret = hash_function_((size_t)syms_sum, A, N);
 	assert(hf_ret < N);
-	srand((uint32_t)hf_ret);	
+	srand((uint32_t)hf_ret);
 
-	size_t id = (size_t)rand() % N;
-	PRINT_DEBUG("rand: %lu\n", id);
+	size_t id;
+	do {
+		id = (size_t)rand() % N;
+		PRINT_DEBUG("pushs rand: %lu\n", id);
+		if (data_[id].has_value() == false)
+			break;
+		if (*data_[id] == key)
+			break;
+	} while (true);
 	data_[id] = key;
 	// data_[hash_function_((size_t)syms_sum, A, N)] = key;
 }
@@ -46,10 +53,17 @@ auto Table::get(std::string_view key) const -> std::optional<std::string_view>
 
 	auto hf_ret = hash_function_((size_t)syms_sum, A, N);
 	assert(hf_ret < N);
-	srand((uint32_t)hf_ret);	
+	srand((uint32_t)hf_ret);
 
-	size_t id = (size_t)rand() % N;
-	PRINT_DEBUG("rand: %lu\n", id);
-	return data_[id];
+	size_t id;
+	do {
+		id = (size_t)rand() % N;
+		PRINT_DEBUG("gets rand: %lu\n", id);
+		if (data_[id].has_value() == false)
+			return std::nullopt;
+		if (*data_[id] == key)
+			return data_[id];
+	} while (true);
+	// return data_[id];
 	// return data_[hash_function_((size_t)syms_sum, A, N)];
 }

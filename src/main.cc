@@ -1,10 +1,15 @@
 #include <print>
+#include <iostream>
 #include "table.h"
 
 int main()
 {
+	std::array<const char *, 5> countries {"Russia", "USA", "Germany", "Japan", "UK"};
 	Table t;
-	t.push("Sample Text");
-	std::println("{}",t.get("Hello World").value_or("Empty"));
-	std::println("{}",t.get("Sample Text").value_or("Empty"));
+	for (auto const & c : countries)
+		t.push(c);
+
+	std::string guess;
+	std::cin >> guess;
+	std::println("{}",t.get(guess).value_or("No such country in list!"));
 }
