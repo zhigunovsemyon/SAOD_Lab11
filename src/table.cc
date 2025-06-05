@@ -1,4 +1,5 @@
 #include "table.h"
+#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -12,9 +13,11 @@ static int64_t syms_sum_(std::string_view str) noexcept
 	return sum;
 }
 
-static size_t hash_function_(std::size_t key, [[maybe_unused]] double A, std::size_t m)
+static size_t hash_function_(std::size_t key, double A, std::size_t m)
 {
-	return key % m;
+	auto frac_part = A * (double)key - floor(A * (double)key); // Дробная часть
+	assert(frac_part < 1), assert(frac_part >= 0);
+	return (size_t)((double)m * frac_part); // Дробная часть * число элементов
 }
 
 void Table::push(std::string_view key)
