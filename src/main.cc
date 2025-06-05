@@ -4,7 +4,7 @@
 int main()
 {
 	Table t;
-	std::println("{}",t.capacity());
-	std::println("{}",t.get("").value_or("Empty"));
-	std::println("Hello World!");
+	t.push("Sample Text");
+	std::println("{}",t.get("Hello World").value_or("Empty"));
+	std::println("{}",t.get("Sample Text").value_or("Empty"));
 }

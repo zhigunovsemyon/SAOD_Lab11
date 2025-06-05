@@ -34,10 +34,16 @@ template <std::size_t N> void Table<N>::push(std::string_view key)
 	auto syms_sum = syms_sum_(key);
 	if (syms_sum < 0)
 		throw std::length_error{"Слишком большая строка!"};
+
+	data_[(size_t)syms_sum % N] = key;
 }
 
 template <std::size_t N>
-auto Table<N>::get([[maybe_unused]] std::string_view key) const -> std::optional<std::string_view>
+auto Table<N>::get(std::string_view key) const -> std::optional<std::string_view>
 {
-	return data_[0];
+	auto syms_sum = syms_sum_(key);
+	if (syms_sum < 0)
+		return std::nullopt;
+
+	return data_[(size_t)syms_sum % N];
 }
