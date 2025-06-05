@@ -23,7 +23,7 @@ void Table::push(std::string_view key)
 	if (syms_sum < 0)
 		throw std::length_error{"Слишком большая строка!"};
 
-	data_[hash_function_((size_t)syms_sum, 0, N)] = key;
+	data_[hash_function_((size_t)syms_sum, A, N)] = key;
 }
 
 auto Table::get(std::string_view key) const -> std::optional<std::string_view>
@@ -32,6 +32,5 @@ auto Table::get(std::string_view key) const -> std::optional<std::string_view>
 	if (syms_sum < 0)
 		return std::nullopt;
 
-	// return data_[(size_t)syms_sum % N];
-	return data_[hash_function_((size_t)syms_sum, 0, N)];
+	return data_[hash_function_((size_t)syms_sum, A, N)];
 }
