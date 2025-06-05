@@ -42,10 +42,9 @@ void Table::push(std::string_view key)
 			break;
 	} while (true);
 	data_[id] = key;
-	// data_[hash_function_((size_t)syms_sum, A, N)] = key;
 }
 
-auto Table::get(std::string_view key) const -> std::optional<std::string_view>
+auto Table::get(std::string_view key) const noexcept -> std::optional<std::string_view>
 {
 	auto syms_sum = syms_sum_(key);
 	if (syms_sum < 0)
@@ -64,6 +63,4 @@ auto Table::get(std::string_view key) const -> std::optional<std::string_view>
 		if (*data_[id] == key)
 			return data_[id];
 	} while (true);
-	// return data_[id];
-	// return data_[hash_function_((size_t)syms_sum, A, N)];
 }

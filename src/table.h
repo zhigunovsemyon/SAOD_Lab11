@@ -13,7 +13,7 @@ private:
 	Container data_;
 
 public:
-	auto get(std::string_view key) const -> std::optional<std::string_view>;
+	auto get(std::string_view key) const noexcept-> std::optional<std::string_view> ;
 
 	void push(std::string_view key);
 
